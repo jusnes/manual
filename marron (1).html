@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manual Interactivo - Code Braker</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary: #0c2461;
+            --secondary: #1e3799;
+            --accent: #00f2fe;
+            --danger: #e74c3c;
+            --success: #2ecc71;
+            --warning: #f39c12;
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Header Styles */
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            animation: fadeIn 1s ease-in;
+        }
+
+        .logo {
+            font-size: 3.5em;
+            margin-bottom: 10px;
+            text-shadow: 0 0 20px var(--accent);
+            background: linear-gradient(45deg, var(--accent), #ffffff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: bold;
+        }
+
+        .tagline {
+            font-size: 1.3em;
+            opacity: 0.9;
+            margin-bottom: 20px;
+        }
+
+        /* Navigation */
+        .nav-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .nav-tab {
+            padding: 12px 24px;
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            border-radius: 25px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1em;
+        }
+
+        .nav-tab:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .nav-tab.active {
+            background: var(--accent);
+            color: var(--primary);
+            font-weight: bold;
+        }
+
+        /* Content Sections */
+        .content-section {
+            display: none;
+            animation: slideIn 0.5s ease;
+        }
+
+        .content-section.active {
+            display: block;
+        }
+
+        .section-title {
+            font-size: 2em;
+            margin-bottom: 20px;
+            text-align: center;
+            color: var(--accent);
+        }
+
+        /* Card Grid */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 25px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 242, 254, 0.3);
+        }
+
+        .card h3 {
+            color: var(--accent);
+            margin-bottom: 15px;
+            font-size: 1.4em;
+        }
+
+        /* Controls Grid */
+        .controls-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .control-item {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .key {
+            display: inline-block;
+            padding: 5px 10px;
+            background: var(--accent);
+            color: var(--primary);
+            border-radius: 5px;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        /* Level Table */
+        .level-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        .level-table th,
+        .level-table td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .level-table th {
+            background: rgba(255, 255, 255, 0.2);
+            color: var(--accent);
+        }
+
+        .level-table tr:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 10px 0;
+        }
+
+        .progress {
+            height: 100%;
+            background: linear-gradient(90deg, var(--success), var(--accent));
+            border-radius: 10px;
+            transition: width 0.5s ease;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideIn {
+            from { 
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to { 
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .logo {
+                font-size: 2.5em;
+            }
+            
+            .nav-tabs {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .nav-tab {
+                width: 100%;
+                max-width: 300px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="logo">CODE BRAKER</div>
+            <p class="tagline">Conviértete en el héroe del ciberespacio</p>
+        </header>
+
+        <!-- Navigation Tabs -->
+        <nav class="nav-tabs">
+            <button class="nav-tab active" onclick="showSection('controls')">Controles</button>
+            <button class="nav-tab" onclick="showSection('story')">Historia</button>
+            <button class="nav-tab" onclick="showSection('levels')">Niveles</button>
+            <button class="nav-tab" onclick="showSection('powers')">Poderes</button>
+            <button class="nav-tab" onclick="showSection('tips')">Consejos</button>
+        </nav>
+
+        <!-- Controls Section -->
+        <section id="controls" class="content-section active">
+            <h2 class="section-title">Controles del Juego</h2>
+            
+            <div class="card-grid">
+                <div class="card">
+                    <h3>Movimiento</h3>
+                    <div class="controls-grid">
+                        <div class="control-item">
+                            <span class="key">W</span> o <span class="key">↑</span>
+                            <div>Mover Arriba</div>
+                        </div>
+                        <div class="control-item">
+                            <span class="key">S</span> o <span class="key">↓</span>
+                            <div>Mover Abajo</div>
+                        </div>
+                        <div class="control-item">
+                            <span class="key">A</span> o <span class="key">←</span>
+                            <div>Mover Izquierda</div>
+                        </div>
+                        <div class="control-item">
+                            <span class="key">D</span> o <span class="key">→</span>
+                            <div>Mover Derecha</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>Acciones</h3>
+                    <div class="controls-grid">
+                        <div class="control-item">
+                            <span class="key">ESPACIO</span>
+                            <div>Saltar</div>
+                        </div>
+                        <div class="control-item">
+                            <span class="key">E</span>
+                            <div>Atacar</div>
+                        </div>
+                        <div class="control-item">
+                            <span class="key">H</span>
+                            <div>Panel de Controles</div>
+                        </div>
+                        <div class="control-item">
+                            <span class="key">ESC</span>
+                            <div>Pausa/Menú</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Story Section -->
+        <section id="story" class="content-section">
+            <h2 class="section-title">La Historia de Code Braker</h2>
+            
+            <div class="card-grid">
+                <div class="card">
+                    <h3>El Ciberespacio en Peligro</h3>
+                    <p>En lo más profundo de la red existe un mundo donde los datos viajan como luces y las contraseñas flotan como llaves doradas. Pero el temible <strong>Hacker Oscuro</strong> ha desatado el caos digital.</p>
+                </div>
+
+                <div class="card">
+                    <h3>Tu Misión como Bit</h3>
+                    <p>Eres <strong>Bit</strong>, el último guardián digital. Debes recorrer los 3 niveles del sistema, enfrentando amenazas cibernéticas y aprendiendo las claves de la seguridad digital.</p>
+                </div>
+
+                <div class="card">
+                    <h3>Objetivo Final</h3>
+                    <p>Proteger el <strong>Servidor Central</strong> y derrotar al Hacker Oscuro antes de que colapse toda la red. El destino del ciberespacio está en tus manos.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Levels Section -->
+        <section id="levels" class="content-section">
+            <h2 class="section-title">Niveles del Juego</h2>
+            
+            <table class="level-table">
+                <thead>
+                    <tr>
+                        <th>Nivel</th>
+                        <th>Nombre</th>
+                        <th>Que Aprenderás</th>
+                        <th>Dificultad</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td>Phishing</td>
+                        <td>Identificar correos falsos y enlaces maliciosos</td>
+                        <td>Principiante</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>Malware</td>
+                        <td>Esquivar virus, troyanos y ransomware</td>
+                        <td>Intermedio</td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td>Hacker Oscuro</td>
+                        <td>Combate final usando todo lo aprendido</td>
+                        <td>Avanzado</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- Powers Section -->
+        <section id="powers" class="content-section">
+            <h2 class="section-title">Poderes y Herramientas</h2>
+            
+            <div class="card-grid">
+                <div class="card">
+                    <h3>Defensas</h3>
+                    <ul>
+                        <li><strong>Escudo Digital:</strong> Protección temporal contra amenazas</li>
+                        <li><strong>Firewall:</strong> Bloquea ataques entrantes</li>
+                        <li><strong>Antivirus:</strong> Elimina malware automáticamente</li>
+                        <li><strong>VPN:</strong> Teletransportación segura</li>
+                    </ul>
+                </div>
+
+                <div class="card">
+                    <h3>Sistema de Puntos</h3>
+                    <div class="progress-container">
+                        <div>Progreso del Nivel</div>
+                        <div class="progress-bar">
+                            <div class="progress" style="width: 65%"></div>
+                        </div>
+                        <div>65% Completado</div>
+                    </div>
+                    <ul>
+                        <li>+100 pts por llave de seguridad</li>
+                        <li>+250 pts por enemigo derrotado</li>
+                        <li>+500 pts por nivel completado</li>
+                        <li>BONUS por respuestas correctas</li>
+                    </ul>
+                </div>
+
+                <div class="card">
+                    <h3>Logros</h3>
+                    <ul>
+                        <li><strong>Novato Digital:</strong> Completa el nivel 1</li>
+                        <li><strong>Cazavirus:</strong> Derrota 50 enemigos</li>
+                        <li><strong>Guardian del Firewall:</strong> Activa todos los escudos</li>
+                        <li><strong>Heroe del Ciberespacio:</strong> Derrota al Hacker Oscuro</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tips Section -->
+        <section id="tips" class="content-section">
+            <h2 class="section-title">Consejos de Juego</h2>
+            
+            <div class="card-grid">
+                <div class="card">
+                    <h3>Para Principiantes</h3>
+                    <ul>
+                        <li>Explora cada rincon - hay secretos escondidos</li>
+                        <li>Lee todos los mensajes - informacion vital</li>
+                        <li>Usa el menu de pausa para revisar progreso</li>
+                        <li>No te rindas - cada fracaso te hace mas fuerte</li>
+                    </ul>
+                </div>
+
+                <div class="card">
+                    <h3>Ciberseguridad Real</h3>
+                    <ul>
+                        <li>Contraseñas con minimo 8 caracteres</li>
+                        <li>Verifica siempre al remitente en emails</li>
+                        <li>Actualiza tu software regularmente</li>
+                        <li>Copia de seguridad es tu mejor amiga</li>
+                    </ul>
+                </div>
+
+                <div class="card">
+                    <h3>Soporte Tecnico</h3>
+                    <p><strong>Problemas comunes:</strong></p>
+                    <ul>
+                        <li>No inicia - Verifica requisitos del sistema</li>
+                        <li>Se traba - Contacta a los desarrolladores</li>
+                        <li>No guarda - Verifica espacio en disco</li>
+                    </ul>
+                    <p><strong>Contacto:</strong><br>
+                    cybercodecompany.netlify.app<br>
+                    soporte@cybercodecompany.com</p>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        function showSection(sectionId) {
+            // Ocultar todas las secciones
+            document.querySelectorAll('.content-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Remover active de todos los tabs
+            document.querySelectorAll('.nav-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Mostrar sección seleccionada
+            document.getElementById(sectionId).classList.add('active');
+            
+            // Activar tab clickeado
+            event.target.classList.add('active');
+        }
+
+        // Efectos interactivos adicionales
+        document.addEventListener('DOMContentLoaded', function() {
+            // Animación de progreso
+            const progressBar = document.querySelector('.progress');
+            let width = 0;
+            const progressInterval = setInterval(() => {
+                if (width >= 65) {
+                    clearInterval(progressInterval);
+                } else {
+                    width++;
+                    progressBar.style.width = width + '%';
+                }
+            }, 30);
+
+            // Efecto hover en cards
+            const cards = document.querySelectorAll('.card');
+            cards.forEach(card => {
+                card.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-5px)';
+                });
+                
+                card.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0)';
+                });
+            });
+        });
+    </script>
+</body>
+</html>
